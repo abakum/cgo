@@ -1,5 +1,4 @@
-//go:build cgo
-
+//go:generate cmd /c "set CGO_ENABLED=1 && PATH E:/msys64/mingw64/bin;%PATH% && go install"
 package main
 
 /*

@@ -1,4 +1,4 @@
-//go:build cgo
+//go:generate cmd /c "set CGO_ENABLED=1 && PATH E:/msys64/mingw64/bin;%PATH% && go install"
 
 package main
 
@@ -12,9 +12,10 @@ void say_hello_from_c(const char *name) {
 }
 */
 import "C"
+import "unsafe"
 
 func main() {
 	name := C.CString("World")
-	defer C.free(C.malloc(C.size_t(len(C.GoString(name))))) // освобождаем память
+	defer C.free(unsafe.Pointer(name)) // Более правильное освобождение памяти
 	C.say_hello_from_c(name)
 }
