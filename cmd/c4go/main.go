@@ -4,6 +4,8 @@ package main
 
 /*
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 void say_hello_from_c(const char *name) {
     printf("Hello from C, %s!\n", name);

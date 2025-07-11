@@ -4,29 +4,35 @@ package main
 
 /*
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-// Экспортируем функцию SayHelloFromGo в C
-extern void SayHelloFromGo(const char *name);
+// Объявление функции, которая будет реализована в Go
+extern void SayHelloFromGo(char* name);
 
-// Функция, которая будет вызвана из Go
-void say_hello_from_c_wrapper(const char *name) {
+// Функция-обертка для вызова из Go
+static void say_hello_from_c_wrapper(char* name) {
     SayHelloFromGo(name);
 }
 */
 import "C"
-import "fmt"
+import (
+	"fmt"
+	"unsafe"
+)
 
-// Го функция, которую нужно вызвать из C
+// Реализация Go-функции для вызова из C
+//
 //export SayHelloFromGo
 func SayHelloFromGo(name *C.char) {
 	fmt.Printf("Hello from Go, %s!\n", C.GoString(name))
 }
 
 func main() {
-	// Задаем имя
+	// Создаем C-строку
 	name := C.CString("World")
-	// Завершаем программу
-	defer C.free(C.malloc(C.size_t(len(C.GoString(name)))))
-	// Вызываем обертку
+	defer C.free(unsafe.Pointer(name)) // Освобождаем память
+
+	// Вызываем C-функцию
 	C.say_hello_from_c_wrapper(name)
 }
